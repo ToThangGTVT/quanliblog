@@ -1,4 +1,72 @@
-﻿**Bắt đầu:** Chia cấu trúc project thành các thư mục nhỏ: ‘**store, reducer, action**’ và trong mỗi thư mục nên có một fie index.js
+Từng là một sinh viên mới tốt nghiệp ra trường, tôi đã bị ném thẳng vào 1 dự án frontend đầy dãy những ma thuật thần kì. Tôi đã tìm đủ mọi cách để có thể hiểu được Redux... nhưng mọi thứ có vẻ cần khá mơ hồ.
+
+Tôi nhận ra để có thể bắt đầu với Redux bạn cần phải hiểu những điều sau:
+*  `State` là gì mà mỗi dev front-end cần biết về nó
+* Làm thế nào mà redux có thể `quản lý state`
+* `Actions`, `reducers`... bọn này là clgt ???
+* Làm thế nào để `tích hợp` redux vào project react của bạn
+* Nó có `ưu điểm` và `nhược điểm` gì
+
+Nếu bạn đã từng gặp khó khăn khi bắt đầu tiếp cận Redux, Redux Thunk thì đây là một ví dụ giúp bạn hiểu được những thư viện này làm gì, nó giúp ích những gì và khi nào ta nên sử dụng chúng.
+
+## 1. State là gì
+
+Vì redux là một thư viện quản lý state do vậy ta cần phải hiểu state là gì.
+> Theo cá nhân tôi, các đối tượng trên một trang web có rất nhiều dạng hiển thị. Như một button có thể có màu sắc khác nhau, nội dung khác nhau. Và để biểu thị cho từng trạng thái này ta cần 1 thứ gọi là `state`
+
+Cụ thể hơn, trong javascript state là một object. 
+
+```js
+const state = {}
+```
+Bên cạnh đó ta có thể thêm các thuộc tính cho nó.
+```js
+const initialState = {
+  posts: [],
+  buttonDelete: {
+    show: false
+  }
+}
+```
+Khi sử dụng một số framework như React ta có thể chỉ định Button Xóa này có được hiển thị hay không
+```jsx
+<div className={this.state.buttonDelete.show ? '' : 'hidden'}>
+  Delete
+</div>
+```
+Khi `this.state.buttonDelete.show` nhận giá trị `false` React sẽ thêm class `hidden` vào Button và từ đó button và nó sẽ nhận giá trị `display: none` và ngược lại khi`this.state.buttonDelete.show` nhận giá trị `true` thì React sẽ xóa class đó đi và Button Delete được hiển thị
+
+Khi ta sử dụng javascript thuần để thực hiện điều này thì sao, nó sẽ trông như thế này:
+
+```js
+const buttonDelete = {
+  show: false
+}
+
+if (buttonDelete.show === false) {
+  document.querySelector('div').classList.add('hidden')
+} else {
+  document.querySelector('div').classList.remove('hidden')
+}
+```
+Về mặt kĩ thuật, ở ví dụ trên ta vẫn sử dụng state là hằng số `buttonDelete` nhưng bạn có thể nhận ra rằng, mọi thứ đã gọn gàng hơn khi ta sử dụng React vì nó được tự động triển khai các class dựa trên `state` của chính nó.
+
+Việc sử dụng các framework statefull như React, Angular hay Vue làm code gọn gàng, và cho phép ta tập trung vào một việc duy nhất đó là dữ liệu ảnh hưởng ra sao đến ứng dụng phía người dùng.
+ 
+Nói chung state tham chiếu đến điều kiện của một thứ gì đó ở thời điểm cụ thể và chi phối nó, ví dụ như điều kiện hiển thị của một nút xóa.
+
+> Tôi thích việc hiểu state giống như một `object` javascript, nó được một DOM tham chiếu đến và thông qua nó để biểu thị các trạng thái khác nhau
+
+Việc thay đổi `object` này sẽ gây ra việc thay đổi DOM tự động trên giao diện phía người dùng
+
+Đúng với cái tên React (phản ứng) ở đây DOM thực sự phản ứng lại với state khi state có sự thay đổi (theo mình hiểu là thế 😂)
+
+Từ từ khoan, trên tài liệu của React còn có 1 thứ nữa đó là `props`
+## 2. Props là gì
+
+
+
+**Bắt đầu:** Chia cấu trúc project thành các thư mục nhỏ: ‘**store, reducer, action**’ và trong mỗi thư mục nên có một fie index.js
 **Cài đặt:** *npm i react-redux –save | npm i redux --save*
 
 trong trường hợp này ta đã sử dụng context để đặt store là globle data cho toàn ứng dụng
