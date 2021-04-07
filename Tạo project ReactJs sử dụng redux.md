@@ -64,7 +64,79 @@ Việc thay đổi `object` này sẽ gây ra việc thay đổi DOM tự độn
 Từ từ khoan, trên tài liệu của React còn có 1 thứ nữa đó là `props`
 ## 2. Props là gì
 
+Tương tự với `state`, `props` trong react cũng là một đối tượng của javascript, nó còn là cách viết ngắn gọn properties. Hiểu một cách đơn giản, nó lưu trữ các giá trị `attribute` của HTML tag
 
+Ví dụ:
+```jsx
+function Wall() {
+  return (
+    <div>
+      <Greeting name="Nathan" age={27} occupation="Software Developer" />
+    </div>
+  );
+}
+```
+Trong ví dụ component `Greeting` có 3 props đó là `name`, `age`, `occupation`. Bạn có thắc mắc gì về chúng ko? Tại sao lại sử dụng những props này mà ko phải là `state`. Khi tôi viết như này có thể bạn sẽ hiểu tại sao lại sử dụng `props`
+
+```jsx
+function Wall({profile}) {
+  return (
+    <div>
+      <Greeting name={profile.name} age={profile.age} occupation={profile.carrier} />
+    </div>
+  );
+}
+```
+Và ở một nơi khác
+```jsx
+function App() {
+  return (
+    <Wall profile={{name:"Tô", age: 23, carrier:"DEV"}}></Wall>
+  );
+}
+```
+Như bạn thấy, chúng ta đã truyền data từ component cha xuống component con. Và đây cũng chính là ứng dụng chủ yếu của props.
+
+Một câu hỏi đặt ra là ta truyền ngược data từ component con lên component cha như nào?
+
+
+Ở component cha:
+```jsx
+class Parent extends React.Component {
+   state = { message: "parent message" }
+   callbackFunction = (childData) => {
+       this.setState({message: childData})
+   },
+   render() {
+        return (
+            <div>
+                 <Child parentCallback = {this.callbackFunction}/>
+                 <p> {this.state.message} </p>
+            </div>
+        );
+   }
+}
+```
+Ở component con:
+```jsx
+class Child extends React.Component{
+    sendBackData = () => {
+         this.props.parentCallback("child message");
+    },
+    render() { 
+       <button onClick={sendBackData}>click me to send back</button>
+    }
+};
+```
+Ở đây ta đã truyền 1 function cho props ở phía component cha,
+và ở phía component con ta gọi props đó và truyền value. Lúc này value ở component con sẽ thông qua function truyền đến component cha.
+
+Đây là một cách có thể giải quyết được vấn đề truyền data từ component con đến component cha. Nhưng thử tưởng tượng, trong project của bạn có rất nhiều component, các component phân chia tầng tầng lớp lớp với nhau. Khi đó việc truyền data qua lại giữa các component là 1 điều khủng khiếp :((
+
+![image](https://user-images.githubusercontent.com/33534455/113906382-62ccac00-97fe-11eb-869b-4e8ea6898cbe.png)
+> Nó sẽ trông như này
+
+Và từ đó redux ra đời...
 
 **Bắt đầu:** Chia cấu trúc project thành các thư mục nhỏ: ‘**store, reducer, action**’ và trong mỗi thư mục nên có một fie index.js
 **Cài đặt:** *npm i react-redux –save | npm i redux --save*
